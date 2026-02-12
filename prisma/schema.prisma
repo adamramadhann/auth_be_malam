@@ -1,0 +1,16 @@
+// Prisma schema untuk User authentication
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite" 
+}
+
+// Model User = Tabel users di database
+model User {
+  id       String     @id @default(uuid())  // Primary key, auto increment
+  name     String     @unique                         // Username, harus unik
+  password String                                 // Password (akan di-hash)
+}
