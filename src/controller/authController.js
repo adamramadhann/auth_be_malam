@@ -121,3 +121,25 @@ export const getDashboard = async (req = request, res = response ) => {
         });
     }
 };
+
+export const allAcount = async ( req = request, res = response ) => {
+    try {
+        const result = await prisma.user.findMany();
+
+        if(!result) {
+            res.status(400).json({
+                message: "data notfound"
+            });
+        };
+
+        return res.status(200).json({
+            message: "get data success", result
+        });
+
+    } catch (error) {
+        return res.status(500).json({
+            message: "Terjadi kesalahan pada server",
+            error: error.message
+        });
+    }
+};
