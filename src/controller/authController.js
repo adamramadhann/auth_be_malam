@@ -1,6 +1,7 @@
 import { request, response } from "express";
 import prisma from "../config/database.js";
 import jwt from "jsonwebtoken";
+import bcrypt from "bcryptjs";
 
 export const register = async ( req = request, res = response ) => {
     try {
@@ -57,15 +58,7 @@ export const login = async ( req = request, res = response ) => {
             return res.status(400).json({
                 message: "user not found", 
             }) 
-        };
-
-        const isPasswordValid = await bcrypt.compare(password, user.password);
-
-        if(!isPasswordValid) {
-            return res.status(400).json({
-                message: "password not found", 
-            }) 
-        };
+        };      
 
         const token = await jwt.sign(
             {
@@ -119,5 +112,22 @@ export const getDashboard = async (req = request, res = response ) => {
             message: "Terjadi kesalahan pada server",
             error: error.message
         });
+    }
+};
+
+export const allAccount = async (req = request, res = response) => {
+    try {
+        const result = await prisma.user.findMany ();
+
+        return res.status(200).json ({
+            message: "get data success",
+            result
+        })
+        
+    } catch (error) {
+        return res.status(500).json ({
+            message: "server internal error",
+            error: error.message
+        })
     }
 };
